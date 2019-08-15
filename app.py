@@ -1,13 +1,10 @@
 import os
-import sys
-import json
-from datetime import datetime
 
 import requests
 from flask import Flask, request
 
 app = Flask(__name__)
-
+FACEBOOK_TOKEN = os.environ["PAGE_ACCESS_TOKEN"]
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -31,26 +28,29 @@ def webhook():
     if data["object"] == "page":
         for entry in data["entry"]:
             for messaging_event in entry["messaging"]:
-                if messaging_event.get("message"):  # someone sent us a message
-                    sender_id = messaging_event["sender"]["id"]        # the facebook ID of the person sending you the message
-                    recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
-                    message_text = messaging_event["message"]["text"]  # the message's text
+                if messaging_event.get("message"):
+                    sender_id = messaging_event["sender"]["id"]
+                    recipient_id = messaging_event["recipient"]["id"]
+                    message_text = messaging_event["message"]["text"]
                     send_message(sender_id, message_text)
     return "ok", 200
 
 
 def send_message(recipient_id, message_text):
-    params = {"access_token": os.environ["PAGE_ACCESS_TOKEN"]}
+    params = {"access_token": FACEBOOK_TOKEN}
     headers = {"Content-Type": "application/json"}
-    request_content = json.dumps({
+    request_content = {
         "recipient": {
             "id": recipient_id
         },
         "message": {
             "text": message_text
         }
-    })
-    response = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=request_content)
+    }
+    response = requests.post(
+        "https://graph.facebook.com/v2.6/me/messages",
+        params=params, headers=headers, json=request_content
+    )
     response.raise_for_status()
 
 if __name__ == '__main__':
