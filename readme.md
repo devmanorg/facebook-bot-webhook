@@ -3,7 +3,7 @@
 This is a simple Facebook Messenger Webhook, which allows you to receive and send messenges.
 
 1. Use tutorials to get API key:
-    - [russian](https://gist.github.com/voron434/3765d14574067d17aa9e676145df360e)
+    - [russian](https://dvmn.org/encyclopedia/api-docs/how-to-get-facebook-api/)
     - [english](https://weblizar.com/blog/generate-facebook-access-token/)
 2. Create [heroku](https://heroku.com) account and create app there.
 3. Go to `Settings` section and add `Config Vars` pair: `PAGE_ACCESS_TOKEN` and token you got via first step.
