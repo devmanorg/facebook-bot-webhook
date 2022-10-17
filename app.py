@@ -1,10 +1,13 @@
 import os
 
 import requests
+from environs import Env
 from flask import Flask, request
 
 app = Flask(__name__)
-FACEBOOK_TOKEN = os.environ["PAGE_ACCESS_TOKEN"]
+env = Env()
+env.read_env()
+FACEBOOK_TOKEN = env("PAGE_ACCESS_TOKEN")
 
 @app.route('/', methods=['GET'])
 def verify():
